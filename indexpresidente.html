@@ -37,6 +37,7 @@
         <tr>
           <th>Eleitor</th>
           <th>Status</th>
+          <th>Transferencia</th>
         </tr>
       </thead>
       <tbody id="table-body-eleitores">
@@ -63,6 +64,7 @@
   
     eleicao = new web3.eth.Contract(VotingContractInterface, CONTRACT_ADDRESS);
     getCandidatos(eleicao, populaCandidatosPresidente);
+    getVoters(eleicao);
   }
   });
   </script>

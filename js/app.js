@@ -3,6 +3,7 @@ const tableElem = document.getElementById("table-body");
 const candidateOptions = document.getElementById("candidate-options");
 const voteForm = document.getElementById("vote-form");
 
+
 var proposals = [];
 var myAddress;
 var eleicao;
@@ -99,6 +100,32 @@ function populaCandidatosPresidente(candidatos) {
 	
 	
         });
+}
+
+function getVoters(contractRef)
+{
+	contractRef.methods._getVoters().call().then((data)=>{
+		for (i=0; i<data[0].length; i++) {
+			var html = '<tr>';
+			html+= '<td>' + web3.utils.toUtf8(data[0][i]) + '</td>';
+
+			if(data[1][i] == true)
+			html+= '<td>Votou</td>';
+			else
+			html+= '<td>Não Votou</td>';
+
+			if(data[2][i] == "")
+			html+= '<td></td>';
+			else
+			html+= '<td>Voto Transferido</td>';
+			
+
+			html+= '</tr>';
+
+			$('#table-body-eleitores').append(html);
+			
+		}
+	 })
 }
 
 
