@@ -33,7 +33,16 @@ const getMyAccounts = accounts => {
 	}
 };
 
+function giveRightVote()
+{
+	var address = $('#address').val();
+	var name = $('#name').val();
 
+	
+	contractRef.methods.giveRightToVote(address,name).call().then((data)=>{
+				alert("Direito dado");
+	 });
+}
 
 function getCandidatos(contractRef,callback)
 {
