@@ -7,7 +7,7 @@ const voteForm = document.getElementById("vote-form");
 var proposals = [];
 var myAddress;
 var eleicao;
-const CONTRACT_ADDRESS = "0x1E3a9A57DACE2939007Cd0a145980C6529CB06Da";
+const CONTRACT_ADDRESS = "0xE7E27dfE20B2d1f93cBFAB28CD00A12C3df2677B";
 
 
 const ethEnabled = () => {
@@ -36,33 +36,33 @@ const getMyAccounts = accounts => {
 
 function giveRightVote()
 {
-	var address = $('#address').val();
-	var name = $('#name').val();
+    var address = $('#address').val();
+    var name = $('#name').val();
 
-	
-	contractRef.methods.giveRightToVote(address,name).call().then((data)=>{
-				alert("Direito dado");
-	 });
+
+    contractRef.methods.giveRightToVote(address,name).call().then((data)=>{
+        alert("Direito dado");
+    });
 }
 
 function getCandidatos(contractRef,callback)
 {
-	//contractRef.methods.getProposalsCount().call().then((count)=>{
-	contractRef.methods.getProposalsCount().call(async function (error, count) {
-		for (i=0; i<count; i++) {
-			await contractRef.methods.getProposal(i).call().then((data)=>{
-				var proposal = {
-          				name : web3.utils.toUtf8(data[0]),
-          				voteCount : data[1]
-      				};
-				proposals.push(proposal);
- 			});
-		}
-		if (callback) {
-			callback(proposals);
-		}
+    //contractRef.methods.getProposalsCount().call().then((count)=>{
+    contractRef.methods.getProposalsCount().call(async function (error, count) {
+        for (i=0; i<count; i++) {
+            await contractRef.methods.getProposal(i).call().then((data)=>{
+                var proposal = {
+                    name : web3.utils.toUtf8(data[0]),
+                    voteCount : data[1]
+                };
+                proposals.push(proposal);
+            });
+        }
+        if (callback) {
+            callback(proposals);
+        }
 
-	});
+    });
 }
 
 function populaCandidatosEleitor(candidatos) {
@@ -75,7 +75,7 @@ function populaCandidatosEleitor(candidatos) {
 		candidateOption.innerText = candidato.name;
 		candidateOptions.appendChild(candidateOption);
 
-	
+
         });
 }
 
@@ -91,39 +91,38 @@ function populaCandidatosPresidente(candidatos) {
 
 		// Creates a cell element for the votes.
 		const voteCell = document.createElement("td");
-		voteCell.id = "vote-" + candidato.name; 
+		voteCell.id = "vote-" + candidato.name;
 		voteCell.innerText = candidato.voteCount;
 		rowElem.appendChild(voteCell);
 
 		// Adds the new row to the voting table.
 		tableElem.appendChild(rowElem);
-	
-	
+
+
         });
 }
 
 function getVoters(contractRef)
 {
 	contractRef.methods._getVoters().call().then((data)=>{
-		for (i=0; i<data[0].length; i++) {
+		for (let i=0; i<Object.keys(data).length; i++) {
 			var html = '<tr>';
-			html+= '<td>' + web3.utils.toUtf8(data[0][i]) + '</td>';
+			html+= '<td>' + data[0][i] + '</td>';
 
 			if(data[1][i] == true)
-			html+= '<td>Votou</td>';
+                html+= '<td>Votou</td>';
 			else
-			html+= '<td>Não Votou</td>';
+                html+= '<td>Não Votou</td>';
 
 			if(data[2][i] == "")
-			html+= '<td></td>';
+                html+= '<td></td>';
 			else
-			html+= '<td>Voto Transferido</td>';
-			
+                html+= '<td>Voto Transferido</td>';
+
 
 			html+= '</tr>';
-
 			$('#table-body-eleitores').append(html);
-			
+
 		}
 	 })
 }
@@ -140,8 +139,8 @@ $("#btnVote").on('click',function(){
 		})
 		.on('error',function(error) {
 			console.log(error.message);
-               		return;     
-        	});  
+               		return;
+        	});
 
 });
 
@@ -155,7 +154,7 @@ $("#btnGiveVote").on('click',function(){
 		})
 		.on('error',function(error) {
 			console.log(error.message);
-               		return;     
-        	});  
+               		return;
+        	});
 
 });
