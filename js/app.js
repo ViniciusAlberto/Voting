@@ -7,7 +7,7 @@ const voteForm = document.getElementById("vote-form");
 var proposals = [];
 var myAddress;
 var eleicao;
-const CONTRACT_ADDRESS = "0x49eF4D1AE7cB5F25dBb2b5e54CBF90F4dC7aa0AF";
+const CONTRACT_ADDRESS = "0xE7E27dfE20B2d1f93cBFAB28CD00A12C3df2677B";
 
 
 const ethEnabled = () => {

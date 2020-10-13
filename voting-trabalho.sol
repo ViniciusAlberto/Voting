@@ -101,8 +101,8 @@ contract Ballot {
         require(sender.weight != 0, "Has no right to vote");
         sender.voted = true;
         sender.vote = proposal;
-        sender.weight = 0;
         proposals[proposal].voteCount += sender.weight;
+        sender.weight = 0;        
         
     }
 
