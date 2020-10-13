@@ -7,7 +7,7 @@ const voteForm = document.getElementById("vote-form");
 var proposals = [];
 var myAddress;
 var eleicao;
-const CONTRACT_ADDRESS = "0x1E3a9A57DACE2939007Cd0a145980C6529CB06Da";
+const CONTRACT_ADDRESS = "0x49eF4D1AE7cB5F25dBb2b5e54CBF90F4dC7aa0AF";
 
 
 const ethEnabled = () => {
@@ -26,7 +26,7 @@ const getMyAccounts = accounts => {
 		} else {
 			myAddress = accounts[0];
 			accounts.forEach(async myAddress => {
-				console.log(myAddress + " : " + await window.web3.eth.getBalance(myAddress));
+				// console.log(myAddress + " : " + await window.web3.eth.getBalance(myAddress));
 			});
 		}
 	} catch(error) {
@@ -80,7 +80,9 @@ function populaCandidatosEleitor(candidatos) {
 }
 
 function populaCandidatosPresidente(candidatos) {
+	console.log(candidatos);
 	candidatos.forEach((candidato, index) => {
+		
 		// Creates a row element.
 		const rowElem = document.createElement("tr");
 
@@ -106,24 +108,25 @@ function getVoters(contractRef)
 {
 	contractRef.methods._getVoters().call().then((data)=>{
 		for (i=0; i<data[0].length; i++) {
+			if(data[0][i] != "0x0000000000000000000000000000000000000000"){
 			var html = '<tr>';
-			html+= '<td>' + web3.utils.toUtf8(data[0][i]) + '</td>';
+			html+= '<td>' + data[0][i] + '</td>';
 
-			if(data[1][i] == true)
-			html+= '<td>Votou</td>';
+			if(data[1][i] == "true")
+				html+= '<td>Votou</td>';
 			else
-			html+= '<td>Não Votou</td>';
+				html+= '<td>Não Votou</td>';
 
-			if(data[2][i] == "")
-			html+= '<td></td>';
+			if(data[2][i] == "" || data[2][i] == "0x0000000000000000000000000000000000000000")
+				html+= '<td></td>';
 			else
-			html+= '<td>Voto Transferido</td>';
-			
+				html+= '<td>Voto Transferido</td>';
 
 			html+= '</tr>';
 
 			$('#table-body-eleitores').append(html);
 			
+			}
 		}
 	 })
 }
@@ -158,4 +161,16 @@ $("#btnGiveVote").on('click',function(){
                		return;     
         	});  
 
+});
+
+$("#btnEncerraEleicao").on('click',function(){
+	eleicao.methods.endElection().send({from: myAddress})
+		.on('receipt', function(receipt) {
+			console.log(receipt);
+	 	alert("Eleição finalizada.");
+ 	})
+ 	.on('error', function(error) {
+	 	console.log(error.message);
+	 	alert("Não foi possível finalizar a eleição.");
+	 });
 });
