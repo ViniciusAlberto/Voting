@@ -7,7 +7,7 @@ const voteForm = document.getElementById("vote-form");
 var proposals = [];
 var myAddress;
 var eleicao;
-const CONTRACT_ADDRESS = "0xE7E27dfE20B2d1f93cBFAB28CD00A12C3df2677B";
+const CONTRACT_ADDRESS = "0x86427E348a21e0deEc8A9d5270B8bd958307F3b5";
 
 
 const ethEnabled = () => {
@@ -34,15 +34,16 @@ const getMyAccounts = accounts => {
 	}
 };
 
-function giveRightVote()
+function giveRightToVote(contractRef)
 {
     var address = $('#address').val();
     var name = $('#name').val();
 
-
-    contractRef.methods.giveRightToVote(address,name).call().then((data)=>{
-        alert("Direito dado");
-    });
+    contractRef
+        .methods
+        .giveRightToVote(address,name)
+        .send({ from: myAddress })
+        .on("receipt", () => alert("Direito de voto concedido"));
 }
 
 function getCandidatos(contractRef,callback)
@@ -154,7 +155,7 @@ $("#btnGiveVote").on('click',function(){
         eleicao.methods.delegate(candidato).send({from: myAddress})
 	       .on('receipt',function(receipt) {
 			//getCandidatos(eleicao, populaCandidatos);
-			windows.location.reaload(true);
+			windows.location.reload(true);
 		})
 		.on('error',function(error) {
 			console.log(error.message);
@@ -173,4 +174,9 @@ $("#btnEncerraEleicao").on('click',function(){
 	 	console.log(error.message);
 	 	alert("Não foi possível finalizar a eleição.");
 	 });
+});
+
+$("#btnGiveVoteRigth").on("click", function() {
+    console.log("clicked");
+    giveRightToVote(eleicao);
 });

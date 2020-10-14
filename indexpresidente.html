@@ -18,17 +18,17 @@
       </tbody>
     </table>
   </div>
-  <form id="vote-form">  
+  <form id="vote-form">
     <button type="button" class="btn btn-primary" id="btnEncerraEleicao">Encerrar Eleição</button>
    <br>
    <br>
    <div class="col-md-5" style="padding-left: 0px !important;">
     <input class="form-control" placeholder="Insira endereço do eleitor" id="address" type="text">
     <input class="form-control" placeholder="Nome do eleitor" id="name" style="margin-top: 20px;"  type="text">
-    <button type="button" class="btn  btn-primary"  style="margin-top: 20px;" onclick="giveRightVote()" >Dar Direito a voto</button>
+    <button type="button" id="btnGiveVoteRigth" class="btn  btn-primary"  style="margin-top: 20px;">Dar Direito a voto</button>
   </div>
   <div class="col-md-7"></div>
-    
+
   </form>
   <div class="row col-md-12" style="padding-top: 20px;">
   <div class="table-responsive">
@@ -54,14 +54,14 @@
 <script src="./js/app.js"></script>
 <script>
   window.addEventListener('load', async function() {
-  
+
   if (!ethEnabled()) {
       alert("Por favor, instale um navegador compatível com Ethereum ou uma extensão como o MetaMask para utilizar esse dApp!");
   }
   else {
- 
+
     getMyAccounts(await web3.eth.getAccounts());
-  
+
     eleicao = new web3.eth.Contract(VotingContractInterface, CONTRACT_ADDRESS);
     getCandidatos(eleicao, populaCandidatosPresidente);
     getVoters(eleicao);
