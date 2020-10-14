@@ -110,7 +110,7 @@ function getVoters(contractRef)
     const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 	contractRef.methods._getVoters().call().then((data)=>{
-		for (let i=0; i<Object.keys(data).length; i++) {
+		for (let i=0; i<data[0].length; i++) {
 			var html = '<tr>';
 			html+= '<td>' + data[0][i] + '</td>';
 
