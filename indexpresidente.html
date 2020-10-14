@@ -19,13 +19,13 @@
     </table>
   </div>
   <form id="vote-form">  
-    <button type="button" class="btn btn-primary" id="btnVote">Encerrar Eleição</button>
+    <button type="button" class="btn btn-primary" id="btnEncerraEleicao">Encerrar Eleição</button>
    <br>
    <br>
    <div class="col-md-5" style="padding-left: 0px !important;">
     <input class="form-control" placeholder="Insira endereço do eleitor" id="address" type="text">
     <input class="form-control" placeholder="Nome do eleitor" id="name" style="margin-top: 20px;"  type="text">
-    <button type="button" class="btn  btn-primary"  style="margin-top: 20px;" id="btnGiveVote">Dar Direito a voto</button>
+    <button type="button" class="btn  btn-primary"  style="margin-top: 20px;" onclick="giveRightVote()" >Dar Direito a voto</button>
   </div>
   <div class="col-md-7"></div>
     

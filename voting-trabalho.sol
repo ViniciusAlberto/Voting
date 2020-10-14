@@ -19,6 +19,7 @@ contract Ballot {
     mapping(address => Voter) public voters;
     mapping(uint => address) public holders;
     uint public votersCount;
+    bool public overElection;
 
     Proposal[] public proposals;
 
@@ -27,7 +28,7 @@ contract Ballot {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
         votersCount = 1;
-
+        
         for (uint i = 0; i < proposalNames.length; i++) {
             proposals.push(Proposal({
                 name: proposalNames[i],
@@ -53,6 +54,7 @@ contract Ballot {
 
 
     function giveRightToVote(address voter, string memory voterName) public {
+        require(!overElection, "The election finished.");
         require(
             msg.sender == chairperson,
             "Only chairperson can give right to vote."
@@ -70,6 +72,7 @@ contract Ballot {
 
     function delegate(address to) public {
         Voter storage sender = voters[msg.sender];
+        require(!overElection, "The election finished.");
         require(!sender.voted, "You already voted.");
         require(sender.weight == 0, "You can not vote!");
 
@@ -92,13 +95,15 @@ contract Ballot {
     }
 
     function vote(uint proposal) public {
+        
         Voter storage sender = voters[msg.sender];
+        require(!overElection, "The election finished.");
         require(sender.weight != 0, "Has no right to vote");
         sender.voted = true;
         sender.vote = proposal;
-        sender.weight = 0;
-
         proposals[proposal].voteCount += sender.weight;
+        sender.weight = 0;        
+        
     }
 
     function winningProposal() public view
@@ -129,6 +134,12 @@ contract Ballot {
         voteCount = proposals[index].voteCount;
     }
 
+    function endElection() public 
+            returns (bytes32 winnerName_)
+    {
+        overElection = true;
+        winnerName_ = winnerName();
+    }
 
     function stringToBytes32(string memory source) public pure returns (bytes32 result) {
     bytes memory tempEmptyStringTest = bytes(source);

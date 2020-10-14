@@ -26,7 +26,7 @@ const getMyAccounts = accounts => {
 		} else {
 			myAddress = accounts[0];
 			accounts.forEach(async myAddress => {
-				console.log(myAddress + " : " + await window.web3.eth.getBalance(myAddress));
+				// console.log(myAddress + " : " + await window.web3.eth.getBalance(myAddress));
 			});
 		}
 	} catch(error) {
@@ -80,7 +80,9 @@ function populaCandidatosEleitor(candidatos) {
 }
 
 function populaCandidatosPresidente(candidatos) {
+	console.log(candidatos);
 	candidatos.forEach((candidato, index) => {
+
 		// Creates a row element.
 		const rowElem = document.createElement("tr");
 
@@ -157,4 +159,16 @@ $("#btnGiveVote").on('click',function(){
                		return;
         	});
 
+});
+
+$("#btnEncerraEleicao").on('click',function(){
+	eleicao.methods.endElection().send({from: myAddress})
+		.on('receipt', function(receipt) {
+			console.log(receipt);
+	 	alert("Eleição finalizada.");
+ 	})
+ 	.on('error', function(error) {
+	 	console.log(error.message);
+	 	alert("Não foi possível finalizar a eleição.");
+	 });
 });
