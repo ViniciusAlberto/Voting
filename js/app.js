@@ -106,20 +106,22 @@ function populaCandidatosPresidente(candidatos) {
 
 function getVoters(contractRef)
 {
+    const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 	contractRef.methods._getVoters().call().then((data)=>{
 		for (let i=0; i<Object.keys(data).length; i++) {
 			var html = '<tr>';
 			html+= '<td>' + data[0][i] + '</td>';
 
-			if(data[1][i] == true)
+			if(data[1][i] === true)
                 html+= '<td>Votou</td>';
 			else
                 html+= '<td>Não Votou</td>';
 
-			if(data[2][i] == "")
+			if(data[2][i] === NULL_ADDRESS)
                 html+= '<td></td>';
 			else
-                html+= '<td>Voto Transferido</td>';
+                html+= '<td>Sim</td>';
 
 
 			html+= '</tr>';
